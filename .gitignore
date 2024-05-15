@@ -47,3 +47,4 @@ Desktop.ini
 # Editors
 .idea/
 .vscode/
+*.code-workspace
