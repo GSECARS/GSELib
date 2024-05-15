@@ -1,10 +1,10 @@
+#!/usr/bin/python3
 # ----------------------------------------------------------------------------------
 # Project: GSELib
-# File: .pre-commit-config.yaml
+# File: __init__.py
 # ----------------------------------------------------------------------------------
-# Purpose: 
-# This file is used to configure the pre-commit hooks that will be used in the 
-# project.
+# Purpose:
+# This file is the main file of the GSELib package.
 # ----------------------------------------------------------------------------------
 # Author: Christofanis Skordas
 #
@@ -16,10 +16,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,30 +29,16 @@
 # SOFTWARE.
 # ----------------------------------------------------------------------------------
 
-repos:
-  - repo: https://github.com/psf/black
-    rev: 24.3.0
-    hooks:
-      - id: black
-        language_version: python3.12
-        args: ["--config=pyproject.toml"]
+from pathlib import Path
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-        additional_dependencies: ["Flake8-pyproject"]
+from gselib import tools
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.9.0
-    hooks:
-      - id: mypy
-        args: ["--config=pyproject.toml"]
+__all__ = ["__version__", "tools"]
 
-  - repo: local
-    hooks:
-      - id: version
-        name: Update Version
-        entry: python gselib/tools/version.py
-        language: system
-        pass_filenames: false
+
+# Set the version of the package
+try:
+    with open(Path(__file__).resolve() / ".static-version", "r") as file:
+        __version__ = file.read().strip()
+except FileNotFoundError:
+    __version__ = "0.0.1"
