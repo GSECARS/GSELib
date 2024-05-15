@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 # ----------------------------------------------------------------------------------
 # Project: GSELib
-# File: __init__.py
+# File: paths.py
 # ----------------------------------------------------------------------------------
 # Purpose:
-# This is the main file for the tools module of the GSELib package.
+# This file contains the PathModel dataclass that is used to manage the directory
+# paths.
 # ----------------------------------------------------------------------------------
 # Author: Christofanis Skordas
 #
@@ -29,7 +30,31 @@
 # SOFTWARE.
 # ----------------------------------------------------------------------------------
 
-from gselib.tools.version import Version
-from gselib.tools.paths import AssetPathModel
+from dataclasses import dataclass, field
+from pathlib import Path, PurePosixPath
 
-__all__ = ["Version", "AssetPathModel"]
+
+@dataclass
+class AssetPathModel:
+    """Dataclass to manage the paths of the assets directory."""
+
+    assets_dir: str = field(compare=False, repr=False)
+
+    _assets_path: str = field(init=False, compare=False)
+    _icon_path: str = field(init=False, compare=False)
+    _style_path: str = field(init=False, compare=False)
+
+    def __post_init__(self) -> None:
+        self._assets_path = Path(self.assets_dir).absolute().as_posix()
+        self._icon_path = PurePosixPath(self._assets_path).joinpath("icons").as_posix()
+        self._style_path = PurePosixPath(self._assets_path).joinpath("styles").as_posix()
+
+    @property
+    def icon_path(self) -> str:
+        """Return the path to the icons directory."""
+        return self._icon_path
+
+    @property
+    def style_path(self) -> str:
+        """Return the path to the styles directory."""
+        return self._style_path
