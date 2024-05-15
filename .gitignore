@@ -48,3 +48,6 @@ Desktop.ini
 .idea/
 .vscode/
 *.code-workspace
+
+# Tools
+*.mypy_cache/
