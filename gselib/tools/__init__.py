@@ -32,6 +32,7 @@
 from gselib.tools.version import Version
 from gselib.tools.paths import AssetPathModel
 from gselib.tools.trajectory import Trajectory
+from gselib.tools.maps import Map1D, Map2D, Map3D
 
 
-__all__ = ["Version", "AssetPathModel", "Trajectory"]
+__all__ = ["Version", "AssetPathModel", "Trajectory", "Map1D", "Map2D", "Map3D"]
