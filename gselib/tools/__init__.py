@@ -31,5 +31,7 @@
 
 from gselib.tools.version import Version
 from gselib.tools.paths import AssetPathModel
+from gselib.tools.trajectory import Trajectory
 
-__all__ = ["Version", "AssetPathModel"]
+
+__all__ = ["Version", "AssetPathModel", "Trajectory"]
