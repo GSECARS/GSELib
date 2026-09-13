@@ -1,107 +1,79 @@
-# ----------------------------------------------------------------------------------
-# Project: GSELib
-# File: pyproject.toml
-# ----------------------------------------------------------------------------------
-# Purpose: 
-# This file is used to specify the build system of the project.
-# ----------------------------------------------------------------------------------
-# Author: Christofanis Skordas
-#
-# Copyright (C) 2024 GSECARS, The University of Chicago, USA
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
-# ----------------------------------------------------------------------------------
-
-[build-system]
-requires = [
-    "setuptools >= 69.2.0",
-    "setuptools_scm >= 8.0.4",
-    "wheel",
-]
-build-backend = "setuptools.build_meta"
+# SPDX-License-Identifier: MIT
 
 [project]
-name = "GSELib"
-version = "0.0.1"
-authors = [
-    {name = "Christofanis Skordas", email = "55315750+skordaschristofanis@users.noreply.github.com"},
-    {name = "Stella Chariton", email = "52049100+CharitonS@users.noreply.github.com"}
-]
-maintainers = [
-    {name = "Christofanis Skordas", email = "55315750+skordaschristofanis@users.noreply.github.com"}
-]
+name = "gselib"
+dynamic = ["version"]
+authors = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
+maintainers = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
 description = "A library for GSECARS that provides a set of tools for GUI development, data analysis, and data visualization."
 readme = {file = "README.md", content-type = "text/markdown"}
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = ["LICENSE.txt"]
 classifiers = [
+    "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: MIT License",
-    "Topic :: Scientific/Engineering"
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Utilities",
 ]
-requires-python = ">=3.12"
+requires-python = "==3.14.*"
 dependencies = [
 ]
 
-[project.optional-dependencies]
-development = [
-    "black>=24.3.0",
-    "flake8>=7.0.0",
-    "mypy>=1.9.0",
-    "pre-commit>=3.6.2",
-    "setuptools>=69.2.0"
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+    "pytest>=9.1.1",
+    "ruff>=0.16.7",
 ]
 
+[project.scripts]
+gselib = "gselib:main"
+
 [project.urls]
-Homepage = "https://github.com/GSECARS/gselib"
-Issues = "https://github.com/GSECARS/gselib/issues"
+Homepage = "https://github.com/gsecars/gselib"
+Issues = "https://github.com/gsecars/gselib/issues"
 
-[tool.black]
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["gselib"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.ruff]
+exclude = [
+    ".eggs",
+    ".git",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".venv",
+    ".vscode",
+    "build",
+    "dist",
+]
 line-length = 160
-target-version = ['py312']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.git
-  | \.mypy_cache
-  | build
-  | dist
-)/
-'''
+indent-width = 4
+target-version = "py314"
 
-[tool.flake8]
-exclude = ".git,__pycache__,build,dist"
-max-line-length = 160
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+fixable = ["ALL"]
+unfixable = []
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
-[tool.mypy]
-mypy_path = "gselib"
-check_untyped_defs = true
-disallow_any_generics = true
-ignore_missing_imports = true
-no_implicit_optional = true
-show_error_codes = true
-strict_equality = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_unreachable = true
-warn_unused_configs = true
-no_implicit_reexport = true
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = false
+docstring-code-line-length = "dynamic"
