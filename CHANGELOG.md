@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions to run pytest on push and pull requests to the main branch, with mock cli test
 - Contribution guide
 - Changelog file
+- Added deps.py as a way to check for installed dependency groups
 
 ### Removed
 
