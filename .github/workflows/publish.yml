@@ -39,6 +39,8 @@ jobs:
 
       - name: Create GitHub Release
         uses: actions/github-script@v7
+        env:
+          RELEASE_NOTES: ${{ steps.changelog.outputs.notes }}
         with:
           script: |
             await github.rest.repos.createRelease({
@@ -46,5 +48,5 @@ jobs:
               repo: context.repo.repo,
               tag_name: context.ref.replace('refs/tags/', ''),
               name: context.ref.replace('refs/tags/', ''),
-              body: `${{ steps.changelog.outputs.notes }}`,
+              body: process.env.RELEASE_NOTES,
             });
