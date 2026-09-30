@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: MIT
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+wheels/
+
+# Virtual environments
+.venv/
+
+# OS generated files
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+*~
+
+# Tools
+.ruff_cache/
+.pytest_cache/
+
+# Docs build output
+docs/_build/
