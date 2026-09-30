@@ -81,9 +81,12 @@ class NextcloudOCC:
                 self._run(f"files_external:applicable {mount_id} {group_args}")
         return data
 
-    def create_user(self, uid: str, display_name: str, email: str) -> None:
+    def create_user(self, uid: str, display_name: str, email: str, groups: list[str] = None) -> None:
         """Creates a new local Nextcloud user with a generated password emailed to the user."""
-        args = f"user:add --generate-password --display-name={shlex.quote(display_name)} --email={shlex.quote(email)} {shlex.quote(uid)}"
+        args = f"user:add --generate-password --display-name={shlex.quote(display_name)} --email={shlex.quote(email)}"
+        if groups:
+            args += " " + " ".join(f"--group={shlex.quote(g)}" for g in groups)
+        args += f" {shlex.quote(uid)}"
         self._run(args)
 
     def list_users(self, search: str = None) -> dict:
