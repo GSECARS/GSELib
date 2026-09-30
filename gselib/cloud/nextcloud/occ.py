@@ -37,19 +37,23 @@ class NextcloudOCC:
             self._ssh = client
         return self._ssh
 
-    def _run(self, occ_args: str) -> str:
+    def _run(self, occ_args: str, env_vars: dict = None) -> str:
         """Runs an occ command locally or over SSH and returns stdout."""
         if self._occ_cmd is None:
             raise ValueError("occ_cmd is required. Pass it to NextcloudOCC() or set NEXTCLOUD_OCC_CMD.")
         cmd = f"{self._occ_cmd} --no-interaction {occ_args}"
         if self._host:
             ssh = self._connect()
+            if env_vars:
+                exports = " ".join(f"export {k}={shlex.quote(str(v))};" for k, v in env_vars.items())
+                cmd = f"{exports} {cmd}"
             _, stdout, stderr = ssh.exec_command(cmd)
             exit_code = stdout.channel.recv_exit_status()
             out = stdout.read().decode().strip()
             err = stderr.read().decode().strip()
         else:
-            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            run_env = {**os.environ, **(env_vars or {})}
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True, env=run_env)
             exit_code = result.returncode
             out = result.stdout.strip()
             err = result.stderr.strip()
@@ -76,6 +80,18 @@ class NextcloudOCC:
                 group_args = " ".join(f"--add-group={shlex.quote(g)}" for g in applicable_groups)
                 self._run(f"files_external:applicable {mount_id} {group_args}")
         return data
+
+    def create_user(self, uid: str, display_name: str, email: str, password: str) -> None:
+        """Creates a new local Nextcloud user. Sends a welcome/activation email so the user sets their own password."""
+        args = f"user:add --password-from-env --display-name={shlex.quote(display_name)} --email={shlex.quote(email)} --send-welcome-email {shlex.quote(uid)}"
+        self._run(args, env_vars={"OC_PASS": password})
+
+    def list_users(self, search: str = None) -> dict:
+        """Returns Nextcloud users as {uid: display_name}. Optionally filtered by search pattern."""
+        cmd = "user:list --output=json"
+        if search:
+            cmd += f" {shlex.quote(search)}"
+        return json.loads(self._run(cmd))
 
     def list_storages(self) -> list:
         """Returns all configured external storage mounts."""
