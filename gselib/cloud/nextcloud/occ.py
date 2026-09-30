@@ -60,17 +60,22 @@ class NextcloudOCC:
     def create_local_storage(self, mount_point: str, server_path: str, applicable_users: list[str] = None, applicable_groups: list[str] = None) -> dict:
         """Creates a local-path external storage mount."""
         args = ["files_external:create", "--output=json", shlex.quote(mount_point), "local", "null::null", f"--config=datadir={server_path}"]
-        if applicable_users:
-            args += [f"--applicable-to-user={shlex.quote(u)}" for u in applicable_users]
-        if applicable_groups:
-            args += [f"--applicable-to-group={shlex.quote(g)}" for g in applicable_groups]
         out = self._run(" ".join(args))
         try:
             result = json.loads(out)
-            return {"id": result, "mount_point": mount_point} if isinstance(result, int) else result
+            data = {"id": result, "mount_point": mount_point} if isinstance(result, int) else result
         except json.JSONDecodeError:
             match = re.search(r"\b(\d+)\b", out)
-            return {"id": int(match.group(1)) if match else None, "mount_point": mount_point}
+            data = {"id": int(match.group(1)) if match else None, "mount_point": mount_point}
+        mount_id = data.get("id")
+        if mount_id is not None:
+            if applicable_users:
+                user_args = " ".join(f"--add-user={shlex.quote(u)}" for u in applicable_users)
+                self._run(f"files_external:applicable {mount_id} {user_args}")
+            if applicable_groups:
+                group_args = " ".join(f"--add-group={shlex.quote(g)}" for g in applicable_groups)
+                self._run(f"files_external:applicable {mount_id} {group_args}")
+        return data
 
     def list_storages(self) -> list:
         """Returns all configured external storage mounts."""
