@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-09-12
+## [0.1.0] - 2026-09-30
 
 ### Changed
 
@@ -23,6 +23,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Contribution guide
 - Changelog file
 - Added deps.py as a way to check for installed dependency groups
+- Cloud module with Nextcloud support (`gselib[cloud]`) — REST API client (`NextcloudClient`) and `occ` runner (`NextcloudOCC`) for managing external storage and shares
+- CLI subcommand `gselib cloud nextcloud` for storage and share management via flags or environment variables
+- Tests for the cloud module (client, OCC runner, and CLI dispatch)
+- CI matrix extended to macOS and Windows
+
+### Fixed
+
+- `NextcloudOCC.__exit__` missing required exception arguments
+- Version removed from CLI arguments and shown in the description instead
 
 ### Removed
 
