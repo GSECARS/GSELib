@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-30
+
+### Changed
+
+- Docs deployment switched from `ghp-import` + `gh-pages` branch to GitHub Actions (`upload-pages-artifact` + `deploy-pages`)
+- Publish workflow switched from `pypa/gh-action-pypi-publish` to `uv publish --trusted-publishing`
+
+### Removed
+
+- `ghp-import` from docs dependency group
+
 ## [0.1.0] - 2026-09-30
 
 ### Changed
