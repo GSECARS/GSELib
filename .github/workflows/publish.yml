@@ -9,6 +9,7 @@ on:
 
 permissions:
   id-token: write
+  contents: write
 
 jobs:
   publish:
@@ -25,4 +26,25 @@ jobs:
 
       - run: uv build
 
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - run: uv publish --trusted-publishing always
+
+      - name: Extract changelog notes
+        id: changelog
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          NOTES=$(awk "/^## \[$VERSION\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md)
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: context.ref.replace('refs/tags/', ''),
+              name: context.ref.replace('refs/tags/', ''),
+              body: `${{ steps.changelog.outputs.notes }}`,
+            });
