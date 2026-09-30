@@ -38,7 +38,6 @@ dev = [
     "ruff>=0.16.7",
 ]
 docs = [
-    "ghp-import>=2.1.0",
     "myst-parser>=5.1.0",
     "pydata-sphinx-theme>=0.22.0",
     "sphinx>=9.1.0",
