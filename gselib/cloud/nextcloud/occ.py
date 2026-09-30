@@ -81,10 +81,10 @@ class NextcloudOCC:
                 self._run(f"files_external:applicable {mount_id} {group_args}")
         return data
 
-    def create_user(self, uid: str, display_name: str, email: str, password: str) -> None:
-        """Creates a new local Nextcloud user. Sends a welcome/activation email so the user sets their own password."""
-        args = f"user:add --password-from-env --display-name={shlex.quote(display_name)} --email={shlex.quote(email)} --send-welcome-email {shlex.quote(uid)}"
-        self._run(args, env_vars={"OC_PASS": password})
+    def create_user(self, uid: str, display_name: str, email: str) -> None:
+        """Creates a new local Nextcloud user with a generated password emailed to the user."""
+        args = f"user:add --generate-password --display-name={shlex.quote(display_name)} --email={shlex.quote(email)} {shlex.quote(uid)}"
+        self._run(args)
 
     def list_users(self, search: str = None) -> dict:
         """Returns Nextcloud users as {uid: display_name}. Parses plain text output."""
