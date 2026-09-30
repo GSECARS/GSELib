@@ -13,8 +13,7 @@ __all__ = ["__version__", "main"]
 
 def make_parser() -> ArgumentParser:
     """Builds the gselib argument parser."""
-    parser = ArgumentParser("gselib")
-    parser.add_argument("-v", "--version", action="version", version=f"gselib {version('gselib')}")
+    parser = ArgumentParser(f"gselib {__version__}")
     parser.add_argument("-t", "--test", action="store_true", help="runs the test suite")
 
     subparsers = parser.add_subparsers(dest="tool", metavar="tool")
