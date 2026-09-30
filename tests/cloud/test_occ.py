@@ -71,27 +71,28 @@ class TestNextcloudOCCLocal:
         assert result["mount_point"] == "TestMount"
 
     def test_create_local_storage_with_users(self, local_occ: NextcloudOCC) -> None:
-        """applicable_users are forwarded as --applicable-to-user flags."""
+        """applicable_users are applied via files_external:applicable --add-user."""
         with patch("subprocess.run", return_value=_proc("1")) as mock:
             local_occ.create_local_storage("Mount", "/path", applicable_users=["alice", "bob"])
-        cmd = mock.call_args.args[0]
-        assert "--applicable-to-user=alice" in cmd
-        assert "--applicable-to-user=bob" in cmd
+        calls = [c.args[0] for c in mock.call_args_list]
+        applicable_cmd = next(c for c in calls if "files_external:applicable" in c)
+        assert "--add-user=alice" in applicable_cmd
+        assert "--add-user=bob" in applicable_cmd
 
     def test_create_local_storage_with_groups(self, local_occ: NextcloudOCC) -> None:
-        """applicable_groups are forwarded as --applicable-to-group flags."""
+        """applicable_groups are applied via files_external:applicable --add-group."""
         with patch("subprocess.run", return_value=_proc("1")) as mock:
             local_occ.create_local_storage("Mount", "/path", applicable_groups=["scientists"])
-        cmd = mock.call_args.args[0]
-        assert "--applicable-to-group=scientists" in cmd
+        calls = [c.args[0] for c in mock.call_args_list]
+        applicable_cmd = next(c for c in calls if "files_external:applicable" in c)
+        assert "--add-group=scientists" in applicable_cmd
 
     def test_create_local_storage_no_users_or_groups(self, local_occ: NextcloudOCC) -> None:
-        """Omitting users and groups produces no --applicable-to-* flags."""
+        """Omitting users and groups skips the files_external:applicable call."""
         with patch("subprocess.run", return_value=_proc("1")) as mock:
             local_occ.create_local_storage("Mount", "/path")
-        cmd = mock.call_args.args[0]
-        assert "--applicable-to-user" not in cmd
-        assert "--applicable-to-group" not in cmd
+        calls = [c.args[0] for c in mock.call_args_list]
+        assert not any("files_external:applicable" in c for c in calls)
 
     def test_list_storages(self, local_occ: NextcloudOCC) -> None:
         """list_storages parses and returns the JSON array from occ."""
