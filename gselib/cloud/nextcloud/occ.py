@@ -87,11 +87,16 @@ class NextcloudOCC:
         self._run(args, env_vars={"OC_PASS": password})
 
     def list_users(self, search: str = None) -> dict:
-        """Returns Nextcloud users as {uid: display_name}. Optionally filtered by search pattern."""
-        cmd = "user:list --output=json"
-        if search:
-            cmd += f" {shlex.quote(search)}"
-        return json.loads(self._run(cmd))
+        """Returns Nextcloud users as {uid: display_name}. Parses plain text output."""
+        cmd = "user:list"
+        out = self._run(cmd)
+        result = {}
+        for line in out.splitlines():
+            line = line.strip().lstrip("- ").strip()
+            if ": " in line:
+                uid, _, display_name = line.partition(": ")
+                result[uid.strip()] = display_name.strip()
+        return result
 
     def list_storages(self) -> list:
         """Returns all configured external storage mounts."""
