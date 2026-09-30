@@ -21,7 +21,7 @@ pip install 'gselib[all]'   # everything
 
 | Module | Extras | Documentation |
 |---|---|---|
-| `gselib.cloud` | `gselib[cloud]` | [Cloud](https://gsecars.github.io/GSELib/cloud.html/) |
+| `gselib.cloud` | `gselib[cloud]` | [Cloud](https://gsecars.github.io/GSELib/cloud.html) |
 
 ## Contribution
 Read more [here](CONTRIBUTING.md) for contribution guidance.
