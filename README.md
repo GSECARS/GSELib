@@ -6,11 +6,19 @@
 [![License](https://img.shields.io/badge/License-MIT-teal.svg)](LICENSE.txt) [![Python](https://img.shields.io/badge/Python-3.14-22558a.svg?logo=python&color=22558a)](https://www.python.org/)
 [![Tests](https://github.com/gsecars/gselib/actions/workflows/test.yml/badge.svg)](https://github.com/gsecars/gselib/actions/workflows/test.yml)
 
-A library for GSECARS that provides a set of tools for GUI development, data analysis, and data visualization.
+A collection of tools for GSECARS.
 
-## Table of Contents
-- [Contribution](#contribution)
-- [License](#license)
+## Installation
+
+```bash
+pip install gselib
+```
+
+## Modules
+
+| Module | Extras | Documentation |
+|---|---|---|
+| `gselib.cloud` | `gselib[cloud]` | [docs/cloud.md](docs/cloud.md) |
 
 ## Contribution
 Read more [here](CONTRIBUTING.md) for contribution guidance.

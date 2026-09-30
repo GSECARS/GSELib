@@ -5,7 +5,7 @@ name = "gselib"
 dynamic = ["version"]
 authors = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
 maintainers = [ {name = "Christofanis Skordas", email = "skordasc@uchicago.edu"} ]
-description = "A library for GSECARS that provides a set of tools for GUI development, data analysis, and data visualization."
+description = "A collection of tools for GSECARS."
 readme = {file = "README.md", content-type = "text/markdown"}
 license = "MIT"
 license-files = ["LICENSE.txt"]
@@ -21,6 +21,13 @@ classifiers = [
 ]
 requires-python = "==3.14.*"
 dependencies = [
+    "gselib[cloud]",
+]
+
+[project.optional-dependencies]
+cloud = [
+    "paramiko>=3.0",
+    "requests>=2.32",
 ]
 
 [dependency-groups]
@@ -46,6 +53,9 @@ packages = ["gselib"]
 
 [tool.hatch.version]
 source = "vcs"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
 
 [tool.ruff]
 exclude = [
