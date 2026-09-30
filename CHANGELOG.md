@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated pre-commit hooks for Ruff
 - Updated README
 - Updated .gitignore
+- Optional dependencies restructured: base install is now empty, `gselib[cloud]` installs Nextcloud support, `gselib[all]` installs everything
+- `NextcloudClient` constants converted to plain lowercase class attributes (e.g. `perm_read`, `share_type_user`)
+- pytest configured with `--import-mode=importlib` to support identically named test files across subdirectories
 
 ### Added
 
@@ -27,6 +30,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CLI subcommand `gselib cloud nextcloud` for storage and share management via flags or environment variables
 - Tests for the cloud module (client, OCC runner, and CLI dispatch)
 - CI matrix extended to macOS and Windows
+- Sphinx documentation with PyData Sphinx Theme, auto-API generation via sphinx-autoapi, and Markdown support via myst-parser
+- GitHub Actions workflow to deploy docs to GitHub Pages on push to main
+- `docs` dependency group with Sphinx, PyData theme, sphinx-autobuild, sphinx-design, and ghp-import
 
 ### Fixed
 

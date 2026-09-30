@@ -1,0 +1,29 @@
+# SPDX-License-Identifier: MIT
+
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.14"
+
+      - run: uv sync --group docs
+
+      - run: uv run sphinx-build -b html docs docs/_build/html
+
+      - run: uv run ghp-import -n -p -f docs/_build/html

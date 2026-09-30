@@ -33,46 +33,75 @@ All commands are available under `gselib cloud nextcloud`. Storage commands (cre
 
 ### External storage
 
-```bash
-# Local (no SSH)
-gselib cloud nextcloud --occ-cmd "php occ" create-storage --mount MyData --path /srv/data
+Local (no SSH):
 
-# Via SSH with key
+```bash
+gselib cloud nextcloud --occ-cmd "php occ" create-storage --mount MyData --path /srv/data
+```
+
+Via SSH with key:
+
+```bash
 gselib cloud nextcloud \
     --occ-cmd "php occ" \
     --ssh-host myserver --ssh-user admin --ssh-key ~/.ssh/id_ed25519 \
     create-storage --mount MyData --path /srv/data
+```
 
-# Nextcloud AIO (Docker over SSH)
+Nextcloud AIO (Docker over SSH):
+
+```bash
 gselib cloud nextcloud \
     --occ-cmd "docker exec --user www-data nextcloud-aio-nextcloud php occ" \
     --ssh-host myserver --ssh-user admin --ssh-key ~/.ssh/id_ed25519 \
     create-storage --mount MyData --path /srv/data --users alice bob
+```
 
-# With groups
+With groups:
+
+```bash
 gselib cloud nextcloud --occ-cmd "php occ" \
     create-storage --mount Shared --path /srv/shared --groups scientists
+```
 
+List storages:
+
+```bash
 gselib cloud nextcloud --occ-cmd "php occ" list-storages
+```
+
+Delete a storage:
+
+```bash
 gselib cloud nextcloud --occ-cmd "php occ" delete-storage --id 3
 ```
 
 ### Shares
+
+Share a path:
 
 ```bash
 gselib cloud nextcloud \
     --url https://nextcloud.example.org --user admin \
     share --nc-path /MyData --recipients alice bob@external.org \
     --permissions read update
-
-gselib cloud nextcloud --url https://nextcloud.example.org --user admin \
-    list-shares --nc-path /MyData
-
-gselib cloud nextcloud --url https://nextcloud.example.org --user admin \
-    delete-share --id 7
 ```
 
 Available permissions: `read`, `update`, `create`, `delete`, `share`, `all`.
+
+List shares:
+
+```bash
+gselib cloud nextcloud --url https://nextcloud.example.org --user admin \
+    list-shares --nc-path /MyData
+```
+
+Delete a share:
+
+```bash
+gselib cloud nextcloud --url https://nextcloud.example.org --user admin \
+    delete-share --id 7
+```
 
 ## Nextcloud library
 
