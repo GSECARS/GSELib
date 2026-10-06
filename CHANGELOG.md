@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.1.7] - 2026-10-06
+
+### Added
+
+- Added logbook in Google docs using the google API
+- Added logbook tests
+- Added logbook docs
+
+### Changed
+
+- Changed deps.py to use the distribution name to check if a package is installed
+
 ## [0.1.6] - 2026-09-30
 
 ### Added
