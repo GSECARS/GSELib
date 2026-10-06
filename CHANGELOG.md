@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added logbook in Google docs using the google API
 - Added logbook tests
+- Added logbook docs
 
 ### Changed
 
