@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from importlib.metadata import version
 
 from gselib.cloud import add_cloud_subparser, run_cloud_command
+from gselib.logbook import add_logbook_subparser, run_logbook_command
 
 __version__ = version("gselib")
 __all__ = ["__version__", "main"]
@@ -18,6 +19,7 @@ def make_parser() -> ArgumentParser:
 
     subparsers = parser.add_subparsers(dest="tool", metavar="tool")
     add_cloud_subparser(subparsers)
+    add_logbook_subparser(subparsers)
 
     return parser
 
@@ -35,6 +37,10 @@ def main() -> None:
 
     if args.tool == "cloud":
         run_cloud_command(args)
+        return
+
+    if args.tool == "logbook":
+        run_logbook_command(args)
         return
 
     parser.print_help()
