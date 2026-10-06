@@ -2,8 +2,7 @@
 
 import functools
 import re
-from importlib.metadata import requires
-from importlib.util import find_spec
+from importlib.metadata import PackageNotFoundError, distribution, requires
 
 __all__ = ["available", "require"]
 
@@ -22,9 +21,17 @@ def _load_groups() -> dict[str, tuple[str, ...]]:
 _GROUPS = _load_groups()
 
 
+def _is_installed(pkg: str) -> bool:
+    try:
+        distribution(pkg)
+        return True
+    except PackageNotFoundError:
+        return False
+
+
 def available(group: str) -> bool:
     """Returns True if all packages for the given dependency group are installed."""
-    return all(find_spec(pkg) is not None for pkg in _GROUPS.get(group, ()))
+    return all(_is_installed(pkg) for pkg in _GROUPS.get(group, ()))
 
 
 def require(group: str):
@@ -33,7 +40,7 @@ def require(group: str):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            missing = [pkg for pkg in _GROUPS.get(group, ()) if find_spec(pkg) is None]
+            missing = [pkg for pkg in _GROUPS.get(group, ()) if not _is_installed(pkg)]
             if missing:
                 raise SystemExit(f"Missing packages for '{group}': {', '.join(missing)}. Run: pip install 'gselib[{group}]'")
             return func(*args, **kwargs)
